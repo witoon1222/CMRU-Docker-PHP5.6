@@ -11,13 +11,6 @@ Build Docker
 
 ใช้คำสั่ง docker compose up -d --build  
 
-แก้ไขรหัสผ่านของ SSH   
-
-
-ค้นหาบรรทัดนี้  
-RUN useradd -m -u 0 -o -s /bin/bash john \ <----- เปลี่ยนจาก john เป็น User ที่ต้องการ && mkdir -p /var/www/.ssh  
-&& chown -R john:john /var/www/.ssh <----- เปลี่ยนจาก john:john เป็น User ที่ต้องการ  
-RUN echo 'john:test1234' | chpasswd <----- เปลี่ยนจาก john เป็น User ที่ต้องการ : รหัสผ่านที่ต้องการ  
 
 การเปลี่ยนชื่อ Container  
 
