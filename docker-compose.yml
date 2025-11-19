@@ -1,0 +1,64 @@
+version: '3'
+
+services:
+
+  # PHP 5.6 + Apache
+  app:
+    build: .
+    container_name: apache
+    restart: always
+    volumes:
+      - ./web:/var/www/html/
+      - /etc/localtime:/etc/localtime:ro
+    ports:
+      - "5001:80"
+    extra_hosts:
+      - "db.localhost:host-gateway"  
+    networks:
+      - app-network
+
+  # MariaDB
+  mariadb:
+    image: mariadb:latest
+    container_name: mariadb
+    restart: always
+    ports:
+      - "3901:3306"
+    volumes:
+      - ./db/data:/var/lib/mysql
+      - ./mariadb.cnf:/etc/mysql/conf.d/custom.cnf:ro
+    environment:
+      MYSQL_ROOT_PASSWORD: "test1234"
+      TZ: "Asia/Bangkok"
+    command: >
+      --event-scheduler=ON
+      --skip-name-resolve
+      --max-connections=1000
+      --character-set-server=utf8
+      --collation-server=utf8_general_ci
+    extra_hosts:
+      - "db.localhost:host-gateway"
+    networks:
+      - app-network
+
+  # phpMyAdmin
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: phpmyadmin
+    restart: always
+    environment:
+      PMA_HOST: mariadb            
+      PMA_USER: root
+      PMA_PASSWORD: "test1234"
+      UPLOAD_LIMIT: 512M
+      MEMORY_LIMIT: 512M
+    volumes:
+      - ./config.inc.php:/etc/phpmyadmin/config.inc.php
+    ports:
+      - "8080:80"
+    networks:
+      - app-network
+# Network
+networks:
+  app-network:
+    driver: bridge
