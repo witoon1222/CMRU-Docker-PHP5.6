@@ -28,6 +28,9 @@ services:
       - ./db/data:/var/lib/mysql
       - ./mariadb.cnf:/etc/mysql/conf.d/custom.cnf:ro
     environment:
+      MYSQL_DATABASE: "test-db"
+      MYSQL_USER: "test-db"
+      MYSQL_PASSWORD: "YOUR-PASSWORD"
       MYSQL_ROOT_PASSWORD: "test1234"
       TZ: "Asia/Bangkok"
     command: >
